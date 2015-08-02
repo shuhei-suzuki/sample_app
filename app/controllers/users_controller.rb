@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, :except=>[:show]
+  before_action :admin_user,     only: :destroy
   
   def index
     @users = User.paginate(page: params[:page])
@@ -20,4 +21,11 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
+  
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User destroyed."
+    redirect_to users_url
+  end
+  
 end
